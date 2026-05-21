@@ -27,6 +27,28 @@ from app.models import Direction, Specialty, PositionCode
 from app.schemas.excel_import import ExcelRowError, SeedResult
 from app.utils.excel_parser import parse_excel_file
 
+# Defines display order in the bot keyboard.
+# Key: lowercase substring of the direction name (partial match is enough).
+# Value: sort position (lower = higher in list).
+# Directions not matched here get sort_order=999 and appear at the end.
+DIRECTION_ORDER: dict[str, int] = {
+    "umumqurilish": 1,
+    "umumiy qurilish": 1,
+    "melioratsiya": 2,
+    "avtomobil yo'llari": 3,
+    "avtomobil yollari": 3,
+    "loyiha": 4,
+}
+
+
+def _resolve_sort_order(name: str) -> int:
+    """Return sort_order for a direction by partial name match."""
+    name_lower = name.strip().lower()
+    for keyword, order in DIRECTION_ORDER.items():
+        if keyword in name_lower:
+            return order
+    return 999
+
 
 async def _clear_tables(session) -> None:
     """Delete all data in dependency order (child → parent)."""
@@ -51,6 +73,7 @@ async def _get_or_create_direction(session, name: str, cache: dict) -> Direction
         name_en=name_clean,
         slug=slug,
         is_active=True,
+        sort_order=_resolve_sort_order(name_clean),
     )
     session.add(direction)
     await session.flush()
