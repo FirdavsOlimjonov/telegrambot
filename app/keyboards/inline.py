@@ -60,7 +60,7 @@ def code_result_keyboard(
         )
         nav_buttons += 1
 
-    builder.button(text="🔄 Yangi qidiruv", callback_data="back:directions")
+    builder.button(text="⬅️ Orqaga", callback_data=f"dir:{direction_id}")
     builder.adjust(nav_buttons, 1)
     return builder.as_markup()
 
@@ -83,8 +83,8 @@ def code_search_result_keyboard(
         builder.button(text="Keyingi ▶️", callback_data=f"scode_page:{current_page + 1}")
         nav_buttons += 1
 
-    builder.button(text="🔍 Yangi qidiruv", callback_data="search:by_code")
-    builder.button(text="🏠 Bosh menyu", callback_data="back:directions")
+    builder.button(text="🔍 Kod bilan qidiruv", callback_data="search:by_code")
+    builder.button(text="Bosh menyu", callback_data="back:directions")
     builder.adjust(nav_buttons, 1, 1)
     return builder.as_markup()
 

@@ -32,8 +32,10 @@ from app.utils.excel_parser import parse_excel_file
 # Value: sort position (lower = higher in list).
 # Directions not matched here get sort_order=999 and appear at the end.
 DIRECTION_ORDER: dict[str, int] = {
+    "Umumqurilish": 1,
     "umumqurilish": 1,
     "umumiy qurilish": 1,
+    "Melioratsiya": 2,
     "melioratsiya": 2,
     "avtomobil yo'llari": 3,
     "avtomobil yollari": 3,

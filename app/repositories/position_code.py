@@ -87,7 +87,7 @@ class PositionCodeRepository(BaseRepository[PositionCode]):
         return len(new_records), skipped
 
     async def search_by_code(
-        self, query: str, page: int = 1, page_size: int = 10
+        self, query: str, page: int = 1, page_size: int = 5
     ) -> tuple[list[PositionCode], int]:
         """
         Partial case-insensitive match on the code field.

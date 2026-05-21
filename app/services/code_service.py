@@ -36,7 +36,7 @@ class CodeService:
         return results, total, total_pages
 
     async def search_by_code(
-        self, query: str, page: int = 1, page_size: int = 10
+        self, query: str, page: int = 1, page_size: int = 5
     ) -> tuple[list[PositionCodeRead], int, int]:
         """
         Free-text search on the code field (partial match).

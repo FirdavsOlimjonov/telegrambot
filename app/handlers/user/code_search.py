@@ -13,7 +13,7 @@ from app.services.code_service import CodeService
 
 router = Router(name="user:code_search")
 
-_PAGE_SIZE = 10
+_PAGE_SIZE = 5
 
 
 def _format_result(code: PositionCodeRead, index: int) -> str:

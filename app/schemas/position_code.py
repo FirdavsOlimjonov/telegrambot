@@ -23,4 +23,4 @@ class PositionCodeFilter(BaseModel):
     direction_id: int
     specialty_id: int
     page: int = Field(default=1, ge=1)
-    page_size: int = Field(default=10, ge=1, le=50)
+    page_size: int = Field(default=5, ge=1, le=50)
