@@ -11,11 +11,7 @@ CREATE USER mehnat_user WITH
 -- Create the database
 CREATE DATABASE mehnat_bot
     WITH
-    OWNER = mehnat_user
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'en_US.UTF-8'
-    LC_CTYPE = 'en_US.UTF-8'
-    TEMPLATE = template0;
+    OWNER = mehnat_user;
 
 -- Grant all privileges
 GRANT ALL PRIVILEGES ON DATABASE mehnat_bot TO mehnat_user;
