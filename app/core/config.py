@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, PostgresDsn, computed_field, model_validator
+from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,14 +13,18 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
+        populate_by_name=True,
     )
 
     # ── Telegram ──────────────────────────────────────────────────────────────
     bot_token: str = Field(..., min_length=40)
     bot_webhook_url: str | None = None
-    admin_ids: list[int] = Field(default_factory=list)
 
-    # ── PostgreSQL (individual components) ───────────────────────────────────
+    # Stored as plain string to avoid pydantic-settings JSON-parsing it.
+    # Use settings.admin_ids to get list[int].
+    admin_ids_raw: str = Field(default="", alias="admin_ids")
+
+    # ── PostgreSQL ────────────────────────────────────────────────────────────
     postgres_host: str = "localhost"
     postgres_port: int = 5432
     postgres_db: str = "mehnat_bot"
@@ -35,14 +39,20 @@ class Settings(BaseSettings):
     # ── Pagination ────────────────────────────────────────────────────────────
     page_size: int = Field(default=5, ge=1, le=50)
 
-    # ── File Upload ───────────────────────────────────────────────────────────
-    max_file_size_mb: int = Field(default=10, ge=1, le=100)
-    upload_dir: str = "uploads/"
-
     # ── Localization ──────────────────────────────────────────────────────────
     default_language: Literal["uz", "ru", "en"] = "uz"
 
     # ── Computed properties ───────────────────────────────────────────────────
+    @computed_field  # type: ignore[misc]
+    @property
+    def admin_ids(self) -> list[int]:
+        """Parses ADMIN_IDS=123456789,987654321 from .env into a list."""
+        return [
+            int(x.strip())
+            for x in self.admin_ids_raw.split(",")
+            if x.strip().isdigit()
+        ]
+
     @computed_field  # type: ignore[misc]
     @property
     def database_url(self) -> str:
@@ -54,7 +64,7 @@ class Settings(BaseSettings):
     @computed_field  # type: ignore[misc]
     @property
     def database_url_sync(self) -> str:
-        """Sync URL used by Alembic migrations only."""
+        """Sync URL used by Alembic only."""
         return (
             f"postgresql+psycopg2://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
@@ -64,27 +74,6 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.app_env == "production"
-
-    @model_validator(mode="after")
-    def validate_admin_ids(self) -> "Settings":
-        if not self.admin_ids:
-            import warnings
-            warnings.warn(
-                "ADMIN_IDS is empty — no admin commands will be accessible.",
-                stacklevel=2,
-            )
-        return self
-
-    @model_validator(mode="before")
-    @classmethod
-    def parse_admin_ids(cls, values: dict) -> dict:
-        """Allow ADMIN_IDS as comma-separated string in .env"""
-        raw = values.get("admin_ids")
-        if isinstance(raw, str):
-            values["admin_ids"] = [
-                int(x.strip()) for x in raw.split(",") if x.strip().isdigit()
-            ]
-        return values
 
 
 @lru_cache(maxsize=1)
