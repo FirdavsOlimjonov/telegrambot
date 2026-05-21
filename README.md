@@ -69,7 +69,11 @@ This creates:
 
 **Copy the example file:**
 
-```bash
+```powershell
+# Windows
+copy .env.example .env
+
+# Linux / macOS
 cp .env.example .env
 ```
 
@@ -95,10 +99,12 @@ POSTGRES_PASSWORD=strong_password_here
 
 **Create and apply the initial migration:**
 
-```bash
-alembic revision --autogenerate -m "init"
-alembic upgrade head
+```powershell
+python -m alembic revision --autogenerate -m "init"
+python -m alembic upgrade head
 ```
+
+> On Windows use `python -m alembic` instead of `alembic` directly to avoid PATH issues.
 
 This creates all tables: `directions`, `specialties`, `position_codes`, `admin_users`.
 
@@ -123,8 +129,8 @@ The database is populated **once** using an Excel file. The bot itself has no up
 
 **Run the seeder:**
 
-```bash
-python scripts/seed.py path/to/your_data.xlsx
+```powershell
+python scripts/seed.py path\to\your_data.xlsx
 ```
 
 **Example output:**
@@ -143,7 +149,7 @@ If there are errors, the row number and reason are printed so you can fix the so
 
 ## Running the Bot
 
-```bash
+```powershell
 python main.py
 ```
 
@@ -255,5 +261,8 @@ Console output is also shown while the bot is running.
 **Seed script: `Direction not found` errors**  
 → The direction name in the Excel file doesn't match any existing direction. The seeder creates directions automatically, so this only happens if the row's `yo'nalish` cell is empty.
 
+**`alembic : The term 'alembic' is not recognized`** (Windows)  
+→ Use `python -m alembic` instead of `alembic`. Also make sure you ran `pip install -r requirements.txt` first.
+
 **`alembic.util.exc.CommandError: Can't locate revision`**  
-→ Run `alembic upgrade head` to apply all pending migrations before starting the bot.
+→ Run `python -m alembic upgrade head` to apply all pending migrations before starting the bot.
