@@ -14,8 +14,8 @@ from app.models import Base  # noqa: F401 — registers all model metadata
 
 config = context.config
 
-# Pull the real DB URL from our Settings object
-config.set_main_option("sqlalchemy.url", settings.database_url_sync)
+# Use the asyncpg async URL — psycopg2 is not required
+config.set_main_option("sqlalchemy.url", settings.database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

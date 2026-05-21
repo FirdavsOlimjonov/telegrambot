@@ -63,15 +63,6 @@ class Settings(BaseSettings):
 
     @computed_field  # type: ignore[misc]
     @property
-    def database_url_sync(self) -> str:
-        """Sync URL used by Alembic only."""
-        return (
-            f"postgresql+psycopg2://{self.postgres_user}:{self.postgres_password}"
-            f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
-        )
-
-    @computed_field  # type: ignore[misc]
-    @property
     def is_production(self) -> bool:
         return self.app_env == "production"
 
