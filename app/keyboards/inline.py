@@ -13,10 +13,8 @@ def directions_keyboard(
     for d in directions:
         label = f"{d.icon_emoji or ''} {d.localized_name(lang)}".strip()
         builder.button(text=label, callback_data=f"dir:{d.id}")
-    builder.adjust(2)
-    # Search by code button always spans full width at the bottom
-    builder.button(text="🔍 Lavozim kodi bo'yicha qidirish", callback_data="search:by_code")
-    builder.adjust(2, 1)
+    builder.button(text="🔍 Kod bo'yicha qidirish", callback_data="search:by_code")
+    builder.adjust(1)
     return builder.as_markup()
 
 
@@ -32,7 +30,7 @@ def specialties_keyboard(
             callback_data=f"spec:{direction_id}:{s.id}",
         )
     builder.button(text="⬅️ Orqaga", callback_data="back:directions")
-    builder.adjust(2)
+    builder.adjust(1)
     return builder.as_markup()
 
 
@@ -44,22 +42,26 @@ def code_result_keyboard(
 ) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
+    nav_buttons = 0
     if current_page > 1:
         builder.button(
             text="◀️ Oldingi",
             callback_data=f"page:{direction_id}:{specialty_id}:{current_page - 1}",
         )
+        nav_buttons += 1
 
     builder.button(text=f"{current_page}/{total_pages}", callback_data="noop")
+    nav_buttons += 1
 
     if current_page < total_pages:
         builder.button(
             text="Keyingi ▶️",
             callback_data=f"page:{direction_id}:{specialty_id}:{current_page + 1}",
         )
+        nav_buttons += 1
 
-    builder.button(text="Bosh sahifa", callback_data="back:directions")
-    builder.adjust(3, 1)
+    builder.button(text="🔄 Yangi qidiruv", callback_data="back:directions")
+    builder.adjust(nav_buttons, 1)
     return builder.as_markup()
 
 
@@ -69,17 +71,21 @@ def code_search_result_keyboard(
 ) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
+    nav_buttons = 0
     if current_page > 1:
         builder.button(text="◀️ Oldingi", callback_data=f"scode_page:{current_page - 1}")
+        nav_buttons += 1
 
     builder.button(text=f"{current_page}/{total_pages}", callback_data="noop")
+    nav_buttons += 1
 
     if current_page < total_pages:
         builder.button(text="Keyingi ▶️", callback_data=f"scode_page:{current_page + 1}")
+        nav_buttons += 1
 
     builder.button(text="🔍 Yangi qidiruv", callback_data="search:by_code")
     builder.button(text="🏠 Bosh menyu", callback_data="back:directions")
-    builder.adjust(3, 1, 1)
+    builder.adjust(nav_buttons, 1, 1)
     return builder.as_markup()
 
 
