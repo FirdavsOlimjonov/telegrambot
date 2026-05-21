@@ -98,6 +98,7 @@ async def seed(file_path: str) -> SeedResult:
         return result
 
     inserted = 0
+    duplicates = 0
     resolution_errors: list[ExcelRowError] = []
 
     async with AsyncSessionFactory() as session:
@@ -105,6 +106,8 @@ async def seed(file_path: str) -> SeedResult:
 
         direction_cache: dict[str, Direction] = {}
         specialty_cache: dict[tuple, Specialty] = {}
+        # Track (direction_id, specialty_id, code) seen within this file
+        seen: set[tuple[int, int, str]] = set()
 
         for i, row in enumerate(valid_rows, start=2):
             direction = await _get_or_create_direction(
@@ -113,6 +116,16 @@ async def seed(file_path: str) -> SeedResult:
             specialty = await _get_or_create_specialty(
                 session, row.specialty, direction.id, specialty_cache
             )
+
+            key = (direction.id, specialty.id, row.code)
+            if key in seen:
+                duplicates += 1
+                logger.warning(
+                    f"Row {i}: duplicate code {row.code!r} for "
+                    f"direction_id={direction.id} specialty_id={specialty.id} — skipped"
+                )
+                continue
+            seen.add(key)
 
             session.add(PositionCode(
                 code=row.code,
@@ -129,7 +142,7 @@ async def seed(file_path: str) -> SeedResult:
     result = SeedResult(
         total_rows=len(valid_rows) + len(parse_errors),
         inserted=inserted,
-        duplicates=0,
+        duplicates=duplicates,
         errors=all_errors,
     )
     result.print_summary()
