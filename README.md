@@ -23,21 +23,26 @@ git clone <repo-url>
 cd telegrambot-mehnat
 ```
 
-**2. Create a virtual environment:**
+**2. Create a virtual environment and activate it:**
+
+```powershell
+# Windows (PowerShell)
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
 
 ```bash
-python -m venv .venv
-
-# Windows
-.venv\Scripts\activate
-
 # Linux / macOS
+python -m venv .venv
 source .venv/bin/activate
 ```
 
+> If PowerShell blocks the activation script, run once:
+> `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
 **3. Install dependencies:**
 
-```bash
+```powershell
 pip install -r requirements.txt
 ```
 
