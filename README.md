@@ -130,7 +130,7 @@ The database is populated **once** using an Excel file. The bot itself has no up
 **Run the seeder:**
 
 ```powershell
-python scripts/seed.py path\to\your_data.xlsx
+python scripts/seed.py C:\Users\Firdavs\Desktop\kodlar.xlsx
 ```
 
 **Example output:**

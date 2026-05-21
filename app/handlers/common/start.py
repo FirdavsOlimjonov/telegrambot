@@ -42,6 +42,6 @@ async def cmd_start(
         return
 
     await message.answer(
-        "📋 Yo'nalishni tanlang:",
+        "Yo'nalishni tanlang:",
         reply_markup=directions_keyboard(directions),
     )

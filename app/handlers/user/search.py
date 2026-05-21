@@ -13,12 +13,12 @@ router = Router(name="user:search")
 
 
 def _format_code_card(code: PositionCodeRead) -> str:
-    lines = [f"🔢 <b>{code.code}</b>"]
+    lines = [f"<b>{code.code}</b>"]
     if code.name:
-        lines.append(f"📌 {code.name}")
+        lines.append(f" – {code.name}")
     if code.description:
         lines.append(f"ℹ️ {code.description}")
-    return "\n".join(lines)
+    return "".join(lines)
 
 
 @router.callback_query(F.data.startswith("dir:"))
@@ -40,7 +40,7 @@ async def on_direction_selected(
 
     await callback.message.edit_text(
         f"📂 <b>{direction.name_uz if direction else 'Yo\'nalish'}</b>\n\n"
-        f"Mutaxassislikni tanlang:",
+        f"Lavozimni tanlang:",
         reply_markup=specialties_keyboard(specialties, direction_id),
         parse_mode="HTML",
     )
@@ -81,7 +81,7 @@ async def on_back_to_directions(
     directions = await service.list_active_directions()
 
     await callback.message.edit_text(
-        "📋 Yo'nalishni tanlang:",
+        "Yo'nalishni tanlang:",
         reply_markup=directions_keyboard(directions),
     )
     await callback.answer()
@@ -109,7 +109,7 @@ async def _show_codes(
 
     if not codes:
         await callback.answer(
-            "Bu mutaxassislik uchun kodlar topilmadi.", show_alert=True
+            "Bu lavozim uchun kodlar topilmadi.", show_alert=True
         )
         return
 

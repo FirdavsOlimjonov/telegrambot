@@ -26,7 +26,7 @@ async def on_admin_stats(
 
     lines = [
         "📊 <b>Statistika</b>\n",
-        f"🔢 Jami kodlar: <b>{stats['total_codes']}</b>\n",
+        f"Jami kodlar: <b>{stats['total_codes']}</b>\n",
         "📂 <b>Yo'nalishlar bo'yicha:</b>",
     ]
     for row in stats["by_direction"]:

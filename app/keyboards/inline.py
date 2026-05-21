@@ -15,7 +15,7 @@ def directions_keyboard(
         builder.button(text=label, callback_data=f"dir:{d.id}")
     builder.adjust(2)
     # Search by code button always spans full width at the bottom
-    builder.button(text="🔍 Kod bo'yicha qidirish", callback_data="search:by_code")
+    builder.button(text="🔍 Lavozim kodi bo'yicha qidirish", callback_data="search:by_code")
     builder.adjust(2, 1)
     return builder.as_markup()
 
@@ -58,7 +58,7 @@ def code_result_keyboard(
             callback_data=f"page:{direction_id}:{specialty_id}:{current_page + 1}",
         )
 
-    builder.button(text="🔄 Yangi qidiruv", callback_data="back:directions")
+    builder.button(text="Bosh sahifa", callback_data="back:directions")
     builder.adjust(3, 1)
     return builder.as_markup()
 

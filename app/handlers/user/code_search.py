@@ -17,13 +17,13 @@ _PAGE_SIZE = 10
 
 
 def _format_result(code: PositionCodeRead, index: int) -> str:
-    lines = [f"<b>{index}. 🔢 {code.code}</b>"]
+    lines = [f"<b>{index}. {code.code}</b>"]
     if code.direction_name:
-        lines.append(f"📂 {code.direction_name}")
+        lines.append(f"{code.direction_name}")
     if code.specialty_name:
-        lines.append(f"👷 {code.specialty_name}")
+        lines.append(f"<b>{code.specialty_name}</b>")
     if code.name:
-        lines.append(f"📌 {code.name}")
+        lines.append(f"{code.name}")
     if code.description:
         lines.append(f"ℹ️ {code.description}")
     return "\n".join(lines)
@@ -36,9 +36,9 @@ async def on_search_by_code(
 ) -> None:
     await state.set_state(CodeSearchStates.waiting_for_code)
     await callback.message.answer(
-        "🔍 Qidirmoqchi bo'lgan kodni kiriting.\n"
+        "🔍 Qidirmoqchi bo'lgan lavozim kodni kiriting.\n"
         "To'liq yoki qisman kiritishingiz mumkin.\n\n"
-        "Masalan: <code>BM-001</code> yoki <code>BM</code>",
+        "Masalan: <code>11200004</code> yoki <code>1120</code>",
         parse_mode="HTML",
     )
     await callback.answer()
@@ -64,7 +64,7 @@ async def on_code_input(
     if not results:
         await message.answer(
             f"❌ <b>{query}</b> bo'yicha hech narsa topilmadi.\n\n"
-            "Boshqa kod kiriting:",
+            "Boshqa lavozim kodini kiriting:",
             parse_mode="HTML",
         )
         return
