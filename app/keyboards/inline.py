@@ -14,6 +14,9 @@ def directions_keyboard(
         label = f"{d.icon_emoji or ''} {d.localized_name(lang)}".strip()
         builder.button(text=label, callback_data=f"dir:{d.id}")
     builder.adjust(2)
+    # Search by code button always spans full width at the bottom
+    builder.button(text="🔍 Kod bo'yicha qidirish", callback_data="search:by_code")
+    builder.adjust(2, 1)
     return builder.as_markup()
 
 
@@ -57,6 +60,26 @@ def code_result_keyboard(
 
     builder.button(text="🔄 Yangi qidiruv", callback_data="back:directions")
     builder.adjust(3, 1)
+    return builder.as_markup()
+
+
+def code_search_result_keyboard(
+    current_page: int,
+    total_pages: int,
+) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    if current_page > 1:
+        builder.button(text="◀️ Oldingi", callback_data=f"scode_page:{current_page - 1}")
+
+    builder.button(text=f"{current_page}/{total_pages}", callback_data="noop")
+
+    if current_page < total_pages:
+        builder.button(text="Keyingi ▶️", callback_data=f"scode_page:{current_page + 1}")
+
+    builder.button(text="🔍 Yangi qidiruv", callback_data="search:by_code")
+    builder.button(text="🏠 Bosh menyu", callback_data="back:directions")
+    builder.adjust(3, 1, 1)
     return builder.as_markup()
 
 

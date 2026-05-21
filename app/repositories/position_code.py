@@ -86,6 +86,36 @@ class PositionCodeRepository(BaseRepository[PositionCode]):
 
         return len(new_records), skipped
 
+    async def search_by_code(
+        self, query: str, page: int = 1, page_size: int = 10
+    ) -> tuple[list[PositionCode], int]:
+        """
+        Partial case-insensitive match on the code field.
+        Returns results from all directions/specialties.
+        """
+        where = PositionCode.code.ilike(f"%{query}%")
+
+        total: int = (
+            await self.session.execute(
+                select(func.count()).select_from(PositionCode).where(where)
+            )
+        ).scalar_one()
+
+        offset = (page - 1) * page_size
+        stmt = (
+            select(PositionCode)
+            .options(
+                selectinload(PositionCode.direction),
+                selectinload(PositionCode.specialty),
+            )
+            .where(where)
+            .order_by(PositionCode.code)
+            .offset(offset)
+            .limit(page_size)
+        )
+        rows = list((await self.session.execute(stmt)).scalars().all())
+        return rows, total
+
     async def stats_by_direction(self) -> list[dict]:
         stmt = (
             select(

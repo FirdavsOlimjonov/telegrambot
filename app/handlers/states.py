@@ -5,3 +5,8 @@ class SearchStates(StatesGroup):
     selecting_direction = State()
     selecting_specialty = State()
     viewing_results = State()
+
+
+class CodeSearchStates(StatesGroup):
+    waiting_for_code = State()
+    viewing_results = State()
