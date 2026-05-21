@@ -3,7 +3,7 @@
 
 -- Create dedicated database user
 CREATE USER mehnat_user WITH
-    PASSWORD 'strong_password_here'
+    PASSWORD 'shaffofmehnat'
     NOSUPERUSER
     NOCREATEDB
     NOCREATEROLE;
