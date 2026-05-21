@@ -20,10 +20,10 @@ class Direction(Base, TimestampMixin, SoftDeleteMixin):
     __tablename__ = "directions"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name_uz: Mapped[str] = mapped_column(String(200), nullable=False)
-    name_ru: Mapped[str] = mapped_column(String(200), nullable=False)
-    name_en: Mapped[str] = mapped_column(String(200), nullable=False)
-    slug: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
+    name_uz: Mapped[str] = mapped_column(Text, nullable=False)
+    name_ru: Mapped[str] = mapped_column(Text, nullable=False)
+    name_en: Mapped[str] = mapped_column(Text, nullable=False)
+    slug: Mapped[str] = mapped_column(String(500), unique=True, nullable=False, index=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     icon_emoji: Mapped[str | None] = mapped_column(String(10), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

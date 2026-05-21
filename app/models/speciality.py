@@ -26,10 +26,10 @@ class Specialty(Base, TimestampMixin, SoftDeleteMixin):
         nullable=False,
         index=True,
     )
-    name_uz: Mapped[str] = mapped_column(String(200), nullable=False)
-    name_ru: Mapped[str] = mapped_column(String(200), nullable=False)
-    name_en: Mapped[str] = mapped_column(String(200), nullable=False)
-    slug: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
+    name_uz: Mapped[str] = mapped_column(Text, nullable=False)
+    name_ru: Mapped[str] = mapped_column(Text, nullable=False)
+    name_en: Mapped[str] = mapped_column(Text, nullable=False)
+    slug: Mapped[str] = mapped_column(String(500), unique=True, nullable=False, index=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     sort_order: Mapped[int] = mapped_column(default=0, nullable=False)
