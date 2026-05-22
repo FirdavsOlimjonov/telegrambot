@@ -5,6 +5,7 @@ from aiogram.types import CallbackQuery
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.keyboards.inline import code_result_keyboard, directions_keyboard, specialties_keyboard
+from app.repositories.bot_user import BotUserRepository
 from app.schemas.position_code import PositionCodeFilter, PositionCodeRead
 from app.services.code_service import CodeService
 from app.services.direction_service import DirectionService
@@ -55,6 +56,10 @@ async def on_specialty_selected(
     _, dir_id_str, spec_id_str = callback.data.split(":")
     direction_id = int(dir_id_str)
     specialty_id = int(spec_id_str)
+
+    # Count this as a search
+    if callback.from_user:
+        await BotUserRepository(session).increment_search(callback.from_user.id)
 
     await _show_codes(callback, session, direction_id, specialty_id, page=1)
 

@@ -8,6 +8,7 @@ from app.models.direction import Direction
 from app.models.speciality import Specialty
 from app.models.position_code import PositionCode
 from app.models.admin_user import AdminUser
+from app.models.bot_user import BotUser
 
 __all__ = [
     "Base",
@@ -17,4 +18,5 @@ __all__ = [
     "Specialty",
     "PositionCode",
     "AdminUser",
+    "BotUser",
 ]

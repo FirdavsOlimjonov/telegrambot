@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.handlers.states import CodeSearchStates
 from app.keyboards.inline import code_search_result_keyboard
+from app.repositories.bot_user import BotUserRepository
 from app.schemas.position_code import PositionCodeRead
 from app.services.code_service import CodeService
 
@@ -55,6 +56,9 @@ async def on_code_input(
     if len(query) < 1:
         await message.answer("Iltimos, kamida 1 ta belgi kiriting.")
         return
+
+    if message.from_user:
+        await BotUserRepository(session).increment_search(message.from_user.id)
 
     service = CodeService(session)
     results, total, total_pages = await service.search_by_code(
